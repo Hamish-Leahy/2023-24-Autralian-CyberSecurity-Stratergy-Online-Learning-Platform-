@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian Cyber Security Strategy Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div id="app" class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Australian Cyber Security Strategy Learning Platform</h1>
+        <div id="navigation" class="mb-4">
+            <button onclick="showOverview()" class="px-4 py-2 bg-blue-500 text-white rounded mr-2">Overview</button>
+            <button onclick="showAllSections()" class="px-4 py-2 bg-blue-500 text-white rounded mr-2">All Sections</button>
+            <button onclick="showProgress()" class="px-4 py-2 bg-blue-500 text-white rounded">Your Progress</button>
+        </div>
+        <div id="content" class="bg-white p-4 rounded shadow"></div>
+    </div>
+
+    <script>
+        const sections = [
+            {
+                id: "overview",
+                name: "Executive Summary",
+                content: `
+                    <h3 class="text-xl font-semibold mb-2">2023–2030 Australian Cyber Security Strategy</h3>
+                    <p class="mb-4">By 2030, Australia will be a world leader in cyber security. The strategy outlines six 'cyber shields' to defend citizens and businesses from cyber threats:</p>
+                    <ol class="list-decimal pl-5 mb-4">
+                        <li>Strong businesses and citizens</li>
+                        <li>Safe technology</li>
+                        <li>World-class threat sharing and blocking</li>
+                        <li>Protected critical infrastructure</li>
+                        <li>Sovereign capabilities</li>
+                        <li>Resilient region and global leadership</li>
+                    </ol>
+                    <p>These shields provide layers of defence, making Australia a harder target for cyber attacks.</p>
+                `
+            },
+            // Add other sections here...
+        ];
+
+        let completedSections = [];
+
+        function showOverview() {
+            document.getElementById('content').innerHTML = `
+                <h2 class="text-2xl font-bold mb-4">2023–2030 Australian Cyber Security Strategy</h2>
+                <p class="mb-4">The Australian Cyber Security Strategy outlines six 'cyber shields' to help defend citizens and businesses from cyber threats. Each shield provides an additional layer of defence, making Australia a harder target.</p>
+                <button onclick="showSection('overview')" class="px-4 py-2 bg-green-500 text-white rounded">Start Learning</button>
+            `;
+        }
+
+        function showAllSections() {
+            let html = '<h2 class="text-2xl font-bold mb-4">All Sections</h2>';
+            sections.forEach(section => {
+                html += `
+                    <div class="mb-4 p-4 border rounded">
+                        <h3 class="text-xl font-semibold mb-2">${section.name}</h3>
+                        <p>Learn about ${section.name} and its role in Australia's cyber security strategy.</p>
+                        <button onclick="showSection('${section.id}')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+                            ${completedSections.includes(section.id) ? 'Review' : 'Start Learning'}
+                        </button>
+                    </div>
+                `;
+            });
+            document.getElementById('content').innerHTML = html;
+        }
+
+        function showProgress() {
+            let html = '<h2 class="text-2xl font-bold mb-4">Your Learning Progress</h2><ul>';
+            sections.forEach(section => {
+                html += `
+                    <li class="mb-2 flex items-center justify-between">
+                        <span>${completedSections.includes(section.id) ? '✅' : '⚪'} ${section.name}</span>
+                        <button onclick="showSection('${section.id}')" class="px-4 py-2 bg-gray-200 rounded">
+                            ${completedSections.includes(section.id) ? 'Review' : 'Start'}
+                        </button>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            html += '<button onclick="resetProgress()" class="mt-4 px-4 py-2 bg-red-500 text-white rounded">Reset Progress</button>';
+            document.getElementById('content').innerHTML = html;
+        }
+
+        function showSection(sectionId) {
+            const section = sections.find(s => s.id === sectionId);
+            document.getElementById('content').innerHTML = `
+                <h2 class="text-2xl font-bold mb-4">${section.name}</h2>
+                ${section.content}
+                <button onclick="${completedSections.includes(sectionId) ? 'void(0)' : `completeSection('${sectionId}')`}" 
+                        class="mt-4 px-4 py-2 ${completedSections.includes(sectionId) ? 'bg-gray-400' : 'bg-green-500'} text-white rounded">
+                    ${completedSections.includes(sectionId) ? 'Completed' : 'Mark as Completed'}
+                </button>
+            `;
+        }
+
+        function completeSection(sectionId) {
+            if (!completedSections.includes(sectionId)) {
+                completedSections.push(sectionId);
+            }
+            showSection(sectionId);
+        }
+
+        function resetProgress() {
+            completedSections = [];
+            showProgress();
+        }
+
+        // Initial view
+        showOverview();
+    </script>
+</body>
+</html>
